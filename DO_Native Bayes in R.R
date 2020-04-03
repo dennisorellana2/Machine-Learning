@@ -15,7 +15,7 @@ library("ggplot2")
 library("caret")
 
 # Load and read the dataset from working directory
-setwd("C:/Documents/Data 630/Module 3/week 5/Assignment 2")
+setwd("C:/Documents/R")
 Creditcard_clients <- read.csv("DefaultCreditCardClients.csv")
 
 
