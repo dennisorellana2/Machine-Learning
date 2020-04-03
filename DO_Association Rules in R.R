@@ -15,7 +15,7 @@ library("arulesViz")
 setwd("C:")
 
 # Load and read the dataset from working directory
-setwd("C:/Documents/Data 630/Module 2/week 3/Assignment 1")
+setwd("C:/Documents/R")
 wages <- read.csv("wages.csv")
 
 
