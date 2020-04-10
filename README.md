@@ -9,4 +9,7 @@ The DefaultCreditCardClients data link is
 http://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients#
 
 The bank-marketing data link is 
-https://archive.ics.uci.edu/ml/datasets/Bank+Marketing(accessed
+https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
+
+The pima_diabetes data link is 
+https://www.kaggle.com/kumargh/pimaindiansdiabetescsv
