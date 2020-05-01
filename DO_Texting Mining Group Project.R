@@ -4,10 +4,13 @@
 #   D.O
 #   J.B
 #
-# #Purpose: This script is part of group project 
-#     to use Texting Mining in R.
-#
-########################################### Install/Load Packages #############################################################################
+# Purpose: This script is part of group project to use Texting Mining in R.
+
+# The goal is extracting useful information from an Online Job Postings dataset 
+# to conduct text mining techniques to identify patterns and/or trends in the Armenia job market from 2004-2015.
+
+
+########################################### Install/Load Packages #########################################################
 #
 # setenv TZ for this session
 Sys.setenv(TZ="America/New_York")
@@ -36,7 +39,7 @@ library("Rgraphviz")
 ########################################### Read the dataset  #################################################################################
 #
 # set the working directory.  Change the folder path to the file location on your PC.
-setwd("C:/Documents")
+setwd("C:/Documents/GitHub/Machine-Learning-master")
 
 # disable scientific notation and display decimals
 options(scipen = 999)
@@ -180,7 +183,7 @@ barplot(qual_ord2[1:6,]$x, names.arg = qual_ord2[1:6,]$Group.1, xlab = "Qualific
 
 par(mfrow=c(1,1)) # rows, cols
 
-########################################### Text Cleaning Functions ####################################################################
+########################################### Text Cleaning Functions ################################################
 #
 ## Job Title
 jobs_text<- jobs.data$Title 
@@ -195,7 +198,7 @@ removeURL <- function(x) gsub("http[^[:space:]]*", "", x)
 # function for removing anything other than English letters or space
 removeNumPunct <- function(x) gsub("[^[:alpha:][:space:]]*", "", x)
 
-########################################### Corpus Text Cleaning #####################################################################
+########################################### Corpus Text Cleaning ################################################
 
 # build a corpus and specify the source to be character vectors 
 corpus.raw <- jobs_text %>% VectorSource() %>% Corpus()
@@ -217,7 +220,7 @@ corpus.cleaned <- corpus.raw %>%
  
 
 
-##################################### Stemming and Stem Completion  #############################################################
+##################################### Stemming and Stem Completion  ###########################################
 
 ## stem words
 corpus.stemmed <- corpus.cleaned %>% tm_map(stemDocument)
@@ -234,7 +237,7 @@ corpus.completed <- corpus.stemmed %>%
   lapply(stemCompletion2, dictionary=corpus.cleaned) %>%
  VectorSource() %>% Corpus()
 
-######################################### Before/After Text Cleaning and Stemming ###############################################
+######################################### Before/After Text Cleaning and Stemming ##################################
 # original text 
 corpus.raw[[1]]$content %>% strwrap(60) %>% writeLines()
 
@@ -247,7 +250,7 @@ corpus.stemmed[[1]]$content %>% strwrap(60) %>% writeLines()
 # after stem completion 
 corpus.completed[[1]]$content %>% strwrap(60) %>% writeLines()
 
-######################################## Issues in Stem Completion  #############################################################
+######################################## Issues in Stem Completion  ##############################################
 
 # count word frequence 
 wordFreq <- function(corpus, word) { 
@@ -266,7 +269,7 @@ corpus.completed_words <- corpus.completed %>%
   replaceWord("assist", "assistant") %>%  
   replaceWord("account", "accountant") %>%  
   replaceWord("programme", "program")
-############################################### Build Term Document Matrix #####################################################
+############################################### Build Term Document Matrix ################################
 ## Build Term Document Matrix 
 tdm <- corpus.completed_words %>% 
   TermDocumentMatrix(control = list(wordLengths = c(1, Inf))) %>% 
@@ -276,7 +279,7 @@ tdm <- corpus.completed_words %>%
 idx <- which(dimnames(tdm)$Terms %in% c("specialist", "developer", "management")) 
 tdm[idx, 1:20] %>% as.matrix() # print 20
 
-################################################# Top Frequent Terms #############################################################
+################################################# Top Frequent Terms ######################################
 # inspect frequent words 
 freq.terms <- tdm %>% findFreqTerms(lowfreq = 650) %>% print
 
@@ -292,7 +295,7 @@ ggplot(df, aes(x=term, y=freq)) + geom_bar(stat="identity") +
   xlab("Terms") + ylab("Count") + coord_flip() + 
   theme(axis.text=element_text(size=15)) + ggtitle("Frequency Terms")
 
-#################################################### Wordcloud ####################################################################
+#################################################### Wordcloud #########################################
 m <- tdm %>% as.matrix 
 # calculate the frequency of words and sort it by frequency 
 word.freq <- m %>% rowSums() %>% sort(decreasing = T) 
@@ -305,7 +308,7 @@ library(wordcloud)
 wordcloud(words = names(word.freq), freq = word.freq, min.freq = 115, rot.per=0.35, use.r.layout=FALSE,
           random.order = F, colors=brewer.pal(8, "Dark2"), scale=c(5,0.8))
 
-############################################### Associations #################################################################
+############################################### Associations ########################################
 
 # which words are associated with 'engineer'? 
 tdm %>% findAssocs("engineer", 0.2)
@@ -318,14 +321,14 @@ tdm %>% findAssocs("developer", 0.2)
 # which words are associated with 'senior'? 
 tdm %>% findAssocs("senior", 0.2)
 
-############################################# Network of Terms ################################################################
+############################################# Network of Terms ###########################################
 library(graph) 
 library(Rgraphviz)
 
 ## network of terms 
 plot(tdm, term = freq.terms, corThreshold = 0.1, weighting = T, main="Network of Terms for Job Posts") 
 
-########################################### Hierarchical Clustering of Terms #####################################################
+########################################### Hierarchical Clustering of Terms ###############################
 # clustering of terms remove sparse terms
 m2 <- tdm %>% removeSparseTerms(sparse = 0.96) %>% as.matrix()
 
@@ -358,7 +361,7 @@ for (i in 1:k) {
   # print(jobs.data$Title[which(kmeansResult£cluster==i)]) 
 }
 
-############################################### Topic Modelling ########################################################################  
+############################################### Topic Modelling ######################################### 
 # Row sum for dtm
 dtm <- tdm %>% as.DocumentTermMatrix()
 rowSum <- apply(dtm , 1, sum)
@@ -377,4 +380,10 @@ rdm.topics <- data.frame(date=jobs.data$jobpostdate[1:14959], topic=rdm.topics) 
 ggplot(rdm.topics, aes(date, fill = term[topic])) + 
   geom_density(position = "stack") + ggtitle("Topic Modeling for IT vs NON-IT Job Titles")
 
+
+# In conclusion, approximately 50% of all job posting require Information Technology skillsets and/or degree(s). 
+
 # End of Script
+
+
+
