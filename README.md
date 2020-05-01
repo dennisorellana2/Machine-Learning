@@ -13,3 +13,6 @@ https://archive.ics.uci.edu/ml/datasets/Bank+Marketing
 
 The pima_diabetes data link is 
 https://www.kaggle.com/kumargh/pimaindiansdiabetescsv
+
+The online job postings link is 
+https://www.kaggle.com/madhab/jobposts/data#data%20job%20posts.csv
