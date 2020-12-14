@@ -22,10 +22,10 @@ R Studio Version 3.6  <img align="left" alt="RStudio" width="26px" src="https://
 Packages: arules and arulesViz
 
 -Decision Tree
-Packages:party, lattice, ggplot2, caret, readr, and rpart
+Packages: party, lattice, ggplot2, caret, readr, and rpart
 
 -Native Bayes 
-Packages:arules, e1071, lattice, ggplot2, and caret
+Packages: arules, e1071, lattice, ggplot2, and caret
 
 -Neural Network 
 Packages: neuralnet,NeuralNetTools, gplot2
