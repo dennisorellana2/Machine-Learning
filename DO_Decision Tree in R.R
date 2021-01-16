@@ -16,6 +16,8 @@ library("ggplot2")
 library("caret")
 library('readr')
 library("rpart")
+library ("e1071")
+library("arulesViz")
 
 # Set the work directory
 setwd("C:")
@@ -47,15 +49,16 @@ barplot(counts, main="Yes vs No suscribed-term-deposited",
 
 # replace "?" with "NA"
 bank_marketing$`passed-days`<- replace(bank_marketing$`passed-days`,bank_marketing$`passed-days`=="?", NA)
-
+bank_marketing$`passed-days`
+      
 #Check for and handle missing values
 bank_marketing$`yearly-balance`[is.na(bank_marketing$`yearly-balance`)]<-mean(bank_marketing$`yearly-balance`, na.rm=TRUE)
-bank_marketing$`passed-days`[is.na(bank_marketing$`passed-days`)]<-NULL
+bank_marketing$`passed-days`[is.na(bank_marketing$`passed-days`)]<-0
 
 # convert the dependent variable suscribed term deposited to a factor
 bank_marketing$`suscribed-term-deposited`<-factor(bank_marketing$`suscribed-term-deposited`)
-
-Summary(bank_marketing$age)
+# convert the age variable to a numeric
+bank_marketing$age<-as.numeric(as.character(bank_marketing$age))
 
 #convert all the character independent variables to factors 
 
